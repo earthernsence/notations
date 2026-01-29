@@ -1,4 +1,6 @@
 {
+  "include": ["src/**/*"],
+  "exclude": ["src/__tests__/*"],
   "compilerOptions": {
     "target": "es5",
     "incremental": true,
@@ -8,6 +10,10 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "rootDir": "src/",
+    "outDir": "./dist/types"
   }
 }
