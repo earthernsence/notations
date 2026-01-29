@@ -115,9 +115,7 @@ export function toSuperscript(value: number): string {
     .join("");
 }
 
-const STANDARD_ABBREVIATIONS = [
-  "K", "M", "B", "T", "Qa", "Qt", "Sx", "Sp", "Oc", "No"
-];
+const STANDARD_ABBREVIATIONS = ["K", "M", "B", "T", "Qa", "Qt", "Sx", "Sp", "Oc", "No"];
 
 const STANDARD_PREFIXES = [
   ["", "U", "D", "T", "Qa", "Qt", "Sx", "Sp", "O", "N"],
@@ -153,7 +151,8 @@ export function abbreviateStandard(rawExp: number): string {
   for (let i = prefix.length / 3 - 1; i >= 0; i--) {
     abbreviation += prefix.slice(i * 3, i * 3 + 3).join("") + STANDARD_PREFIXES_2[i];
   }
-  return abbreviation.replace(/-[A-Z]{2}-/g, "-").replace(/U([A-Z]{2}-)/g, "$1").replace(/-$/, "");
+  return abbreviation.replace(/-[A-Z]{2}-/g, "-").replace(/U([A-Z]{2}-)/g, "$1")
+    .replace(/-$/, "");
 }
 
 // So much of this file is a mess and I'm not sure where's best to add stuff
@@ -174,12 +173,14 @@ export function isExponentFullyShown(exponent: number): boolean {
 // 9.999e99999 with a 100000 exponent threshold; formatting the mantissa rounds and pushes the exponent
 // to the threshold, meaning in some cases that the exponent will have its own exponent and that we don't
 // want to show the mantissa.
-export function formatMantissaWithExponent(mantissaFormatting: (n: number, precision: number) => string,
-exponentFormatting: (n: number, precision: number) => string, base: number, steps: number,
-mantissaFormattingIfExponentIsFormatted?: (n: number, precision: number) => string,
-separator: string = "e", forcePositiveExponent: boolean = false):
-((n: Decimal, precision: number, precisionExponent: number) => string) {
-  return function (n: Decimal, precision: number, precisionExponent: number): string {
+export function formatMantissaWithExponent(
+  mantissaFormatting: (n: number, precision: number) => string,
+  exponentFormatting: (n: number, precision: number) => string, base: number, steps: number,
+  mantissaFormattingIfExponentIsFormatted?: (n: number, precision: number) => string,
+  separator = "e", forcePositiveExponent = false
+):
+  ((n: Decimal, precision: number, precisionExponent: number) => string) {
+  return function(n: Decimal, precision: number, precisionExponent: number): string {
     const realBase = base ** steps;
     let exponent = Math.floor(n.log(realBase)) * steps;
     if (forcePositiveExponent) {
@@ -197,9 +198,9 @@ separator: string = "e", forcePositiveExponent: boolean = false):
     // inaccurancy being something like (realBase^(1e-16 * Math.log10(mantissa))).
     // mantissa should be at most roughly 10 so this is pretty small.
     // IDK if using Math.log or Math.log10 is faster.
-    if (!(1 <= mantissa && mantissa < realBase)) {
+    if (!(mantissa >= 1 && mantissa < realBase)) {
       const adjust = Math.floor(Math.log(mantissa) / Math.log(realBase));
-      mantissa /= Math.pow(realBase, adjust);
+      mantissa /= realBase ** adjust;
       exponent += steps * adjust;
     }
     let m = mantissaFormatting(mantissa, precision);
@@ -215,7 +216,7 @@ separator: string = "e", forcePositiveExponent: boolean = false):
     // this will use at least precision 2 on the exponent if relevant, due to the default
     // value of largeExponentPrecision: number = Math.max(2, precision) in formatExponent.
     const e = exponentFormatting(exponent, precisionExponent);
-    if (typeof mantissaFormattingIfExponentIsFormatted !== 'undefined' && !isExponentFullyShown(exponent)) {
+    if (typeof mantissaFormattingIfExponentIsFormatted !== "undefined" && !isExponentFullyShown(exponent)) {
       // No need to do a second check for roll-over.
       m = mantissaFormattingIfExponentIsFormatted(mantissa, precision);
     }
@@ -231,7 +232,7 @@ export function formatMantissaBaseTen(n: number, precision: number): string {
 }
 
 export function formatMantissa(base: number, digits: string): ((n: number, precision: number) => string) {
-  return function (n: number, precision: number): string {
+  return function(n: number, precision: number): string {
     // We use -1 as a sentinal undefined value for formatExponent in some cases,
     // so we max with zero to avoid strange results.
     let value = Math.round(n * base ** Math.max(0, precision));

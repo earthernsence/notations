@@ -1,5 +1,5 @@
 import { BlobsTextNotation } from "./blobs-text";
-import Decimal from "break_infinity.js";
+import type Decimal from "break_infinity.js";
 
 export class BlobsShortTextNotation extends BlobsTextNotation {
   public get name(): string {
@@ -11,14 +11,15 @@ export class BlobsShortTextNotation extends BlobsTextNotation {
   }
 
   protected blobify(num: Decimal): string {
-    let prefix = "", suffix = "";
+    let prefix = ""; let
+      suffix = "";
     let number = this.reduceNumber(num.abs());
     if (num.sign() === -1) {
       prefix = this.prefixNegative;
       // To allow the combination :unblob: to appear
       number = Math.max(0, number - 1);
     }
-    
+
     const indexes = [
       Math.floor(number / this.suffixes.length),
       number % this.suffixes.length
@@ -30,5 +31,4 @@ export class BlobsShortTextNotation extends BlobsTextNotation {
 
     return this.blobConstructor(prefix, this.suffixes[Math.floor(indexes[1])] + suffix);
   }
-
 }

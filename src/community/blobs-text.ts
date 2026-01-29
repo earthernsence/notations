@@ -6,11 +6,11 @@ export class BlobsTextNotation extends BlobsNotation {
     return "Blobs (Text)";
   }
 
-  protected get prefixes(): Array<string> {
+  protected get prefixes(): string[] {
     return ["", "big", "large", "great", "grand", "huge", "super", "ultra", "mega", "giga", "omega"];
   }
 
-  protected get suffixes(): Array<string> {
+  protected get suffixes(): string[] {
     return ["", "think", "wave", "hug", "nom", "sad", "pats", "yes", "no", "heart", "sleep"];
   }
 
@@ -29,7 +29,7 @@ export class BlobsTextNotation extends BlobsNotation {
   public get infinite(): string {
     return this.blobConstructor("", this.suffixInfinity);
   }
-  
+
   public formatVerySmallNegativeDecimal(num: Decimal): string {
     return this.blobify(Decimal.sub(0, num));
   }
@@ -43,7 +43,8 @@ export class BlobsTextNotation extends BlobsNotation {
   }
 
   protected blobify(num: Decimal): string {
-    let prefix = "", suffix = "";
+    let prefix = ""; let
+      suffix = "";
     let number = this.reduceNumber(num.abs());
     if (num.sign() === -1) {
       prefix = this.prefixNegative;
@@ -56,13 +57,15 @@ export class BlobsTextNotation extends BlobsNotation {
       Math.floor(number / this.suffixes.length) % this.prefixes.length,
       number % this.suffixes.length
     ];
-    
+
     if (indexes[0] >= 1) {
       suffix = `-${indexes[0] + 1}`;
     }
 
-    return this.blobConstructor(prefix + this.prefixes[Math.floor(indexes[1])],
-                                this.suffixes[Math.floor(indexes[2])] + suffix);
+    return this.blobConstructor(
+      prefix + this.prefixes[Math.floor(indexes[1])],
+      this.suffixes[Math.floor(indexes[2])] + suffix
+    );
   }
 
   protected blobConstructor(prefix: string, suffix: string): string {

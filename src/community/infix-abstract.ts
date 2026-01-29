@@ -25,7 +25,7 @@ export abstract class AbstractInfixNotation extends Notation {
     }
 
     const decimal = Decimal.fromValue_noAlloc(value);
-    
+
 
     if (Settings.isInfinite(decimal.abs())) {
       return decimal.sign() < 0 ? this.negativeInfinite : this.infinite;

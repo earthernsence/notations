@@ -80,7 +80,7 @@ export class FoursNotation extends Notation {
   private formatAsRoot(val: Decimal): string {
     const root = Decimal.sqrt(val);
     const str = this.formatDecimal(root);
-    // str will never be 4 or 4^(x), so it always requires a bracket
+    // Str will never be 4 or 4^(x), so it always requires a bracket
     return `(${str})^${NUMBERS[2]}`;
   }
 
@@ -105,15 +105,15 @@ export class FoursNotation extends Notation {
   }
 
   private bracketify(str: string): string {
-    // contains +, -, × or ÷, and the first operator is not ^
-    if ((str.match(/[\+\-\×÷\^]/) || ["^"])[0] !== "^") {
+    // Contains +, -, × or ÷, and the first operator is not ^
+    if (((/[\+\-\×÷\^]/).exec(str) || ["^"])[0] !== "^") {
       return `(${str})`;
     }
     return str;
   }
 
   private multiBracketify(str: string): string {
-    // store the current bracket layer
+    // Store the current bracket layer
     // Brackets are only needed if there is a + or - in layer 0
     // str will never contain ^, so the character is ignored
     let bracketLayer = 0;

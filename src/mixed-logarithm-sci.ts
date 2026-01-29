@@ -1,4 +1,4 @@
-import Decimal from "break_infinity.js";
+import type Decimal from "break_infinity.js";
 import { Notation } from "./notation";
 import { ScientificNotation } from "./scientific";
 
