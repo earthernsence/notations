@@ -1,5 +1,5 @@
 import Decimal from "break_infinity.js";
-import { Settings } from "./settings.js";
+import { Settings } from "./settings";
 
 function commaSection(value: string, index: number): string {
   if (index === 0) {
