@@ -1,0 +1,17 @@
+name: Test build steps
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@v1
+    - run: npm install
+    - run: npm run build
+    
